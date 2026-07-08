@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import API from "../api/axios";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -9,7 +10,7 @@ function Login() {
 
   const [errors, setErrors] = useState({});
 
-  // Handle Input Change
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -18,18 +19,18 @@ function Login() {
       [name]: value,
     }));
 
-    // Clear error while typing
+  
     setErrors((prev) => ({
       ...prev,
       [name]: "",
     }));
   };
 
-  // Form Validation
+  
   const validateForm = () => {
     const newErrors = {};
 
-    // Email Validation
+   
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
     } else if (
@@ -38,7 +39,7 @@ function Login() {
       newErrors.email = "Please enter a valid email address";
     }
 
-    // Password Validation
+ 
     if (!formData.password) {
       newErrors.password = "Password is required";
     } else if (formData.password.length < 8) {
@@ -50,15 +51,29 @@ function Login() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Form Submit
-  const handleSubmit = (e) => {
+ 
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) return;
 
     console.log(formData);
 
-    // Login API will be added here
+    try {
+  const response = await API.post("/auth/login", {
+    email: formData.email,
+    password: formData.password,
+  });
+
+  localStorage.setItem("token", response.data.token);
+
+  alert(response.data.message);
+
+  console.log(response.data);
+
+} catch (error) {
+  alert(error.response?.data?.message || "Invalid credential");
+}
   };
 
   return (

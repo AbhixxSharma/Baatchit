@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import API from "../api/axios";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -67,15 +68,21 @@ function Register() {
 
     if (!validateForm()) return;
 
-    try {
-      console.log(formData);
+   try {
+  const response = await API.post("/auth/register", {
+    name: formData.name,
+    email: formData.email,
+    password: formData.password,
+    confirmPassword: formData.confirmPassword,
+  });
 
-      // API Call will be added here later
-      // const response = await axios.post("/api/auth/register", formData);
+  alert(response.data.message);
 
-    } catch (error) {
-      console.error(error);
-    }
+  console.log(response.data);
+
+} catch (error) {
+  alert(error.response?.data?.message || "Something went wrong");
+}
   };
 
   return (
