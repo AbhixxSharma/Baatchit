@@ -1,4 +1,4 @@
-import Conversation from "../models/Conversation.js";
+import Conversation from "../models/conversation.js";
 
 const createConversation= async(req,res)=>{
     // 1 receiver from req.body

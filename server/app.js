@@ -2,6 +2,8 @@ import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 import authRoutes from "./routes/authRoutes.js";
+import messageRoutes from "./routes/messageRoutes.js"
+import conversationRoute from "./routes/conversationRoutes.js"
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -19,5 +21,6 @@ app.use(express.static("public"))
 app.use(cookieParser())
 // Ye hai phele Api call
 app.use("/api/auth", authRoutes);
-
+app.use("/api/v1/conversations", conversationRoute);
+app.use("/api/message",messageRoutes)
 export { app }

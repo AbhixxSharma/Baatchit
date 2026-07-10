@@ -35,5 +35,5 @@ const getMessage= async(req,res)=>{
   }
 }
 
-export { sendMessages ,getMessages};
+export { sendMessages ,getMessage};
 

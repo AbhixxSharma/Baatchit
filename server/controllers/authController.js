@@ -81,27 +81,29 @@ const loginUser = async (req, res) => {
         message: "Invalid Email or Password",
       });
     }
+    // const user=User.findById(id);
+    const accessToken=user.generateAccessToken();
+    const refreshToken=user.generateRefreshToken();
+     user.refreshToken = refreshToken;
+    await user.save({ validateBeforeSave: false });
 
- 
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" }
-    );
-
-    res.status(200).json({
-      success: true,
-      message: "Login Successful",
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-      },
-    });
+    // 7. Send response
+   return res
+  .status(200)
+  .cookie("accessToken", accessToken, options)
+  .cookie("refreshToken", refreshToken, options)
+  .json({
+    success: true,
+    message: "Login Successful",
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+    },
+  });
 
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: error.message,
     });

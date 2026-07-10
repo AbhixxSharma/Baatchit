@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Conversation from "./conversation";
+import Conversation from "./conversation.js";
 
 const messageSchema= new mongoose.Schema({
     conversationId:{
