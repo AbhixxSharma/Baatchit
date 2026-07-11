@@ -20,7 +20,9 @@ app.use(express.urlencoded({extended: true, limit: "16kb"}))
 app.use(express.static("public"))
 app.use(cookieParser())
 // Ye hai phele Api call
-app.use("/api/auth", authRoutes);
+app.use("/api/v1/auth", authRoutes);
+// conversation route hai 
 app.use("/api/v1/conversations", conversationRoute);
-app.use("/api/message",messageRoutes)
+// ye message route hai
+app.use("/api/v1/messages",messageRoutes)
 export { app }

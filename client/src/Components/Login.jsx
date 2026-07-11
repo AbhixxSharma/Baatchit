@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 import API from "../api/axios";
 
 function Login() {
@@ -10,7 +11,10 @@ function Login() {
 
   const [errors, setErrors] = useState({});
 
-  
+  const { setUser } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -19,18 +23,15 @@ function Login() {
       [name]: value,
     }));
 
-  
     setErrors((prev) => ({
       ...prev,
       [name]: "",
     }));
   };
 
-  
   const validateForm = () => {
     const newErrors = {};
 
-   
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
     } else if (
@@ -39,7 +40,6 @@ function Login() {
       newErrors.email = "Please enter a valid email address";
     }
 
- 
     if (!formData.password) {
       newErrors.password = "Password is required";
     } else if (formData.password.length < 8) {
@@ -51,29 +51,27 @@ function Login() {
     return Object.keys(newErrors).length === 0;
   };
 
- 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) return;
 
-    console.log(formData);
-
     try {
-  const response = await API.post("/auth/login", {
-    email: formData.email,
-    password: formData.password,
-  });
+      const response = await API.post("/auth/login", {
+        email: formData.email,
+        password: formData.password,
+      });
 
-  localStorage.setItem("token", response.data.token);
+      // Store logged in user in Context
+      setUser(response.data.user);
 
-  alert(response.data.message);
+      alert(response.data.message);
 
-  console.log(response.data);
-
-} catch (error) {
-  alert(error.response?.data?.message || "Invalid credential");
-}
+      // Redirect to chat page
+      navigate("/chat");
+    } catch (error) {
+      alert(error.response?.data?.message || "Invalid credentials");
+    }
   };
 
   return (
@@ -85,7 +83,6 @@ function Login() {
 
         <form onSubmit={handleSubmit} className="space-y-5">
 
-       
           <div>
             <label className="block mb-2 font-medium">
               Email
@@ -107,7 +104,6 @@ function Login() {
             )}
           </div>
 
-       
           <div>
             <label className="block mb-2 font-medium">
               Password
@@ -129,14 +125,12 @@ function Login() {
             )}
           </div>
 
-         
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
           >
             Login
           </button>
-
 
           <p className="text-center mt-4">
             Don't have an account?{" "}

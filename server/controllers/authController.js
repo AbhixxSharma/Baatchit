@@ -86,6 +86,10 @@ const loginUser = async (req, res) => {
     const refreshToken=user.generateRefreshToken();
      user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
+    const options={
+      httpOnly:true,
+      secure:false,
+    }
 
     // 7. Send response
    return res

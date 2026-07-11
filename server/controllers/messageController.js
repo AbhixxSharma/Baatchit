@@ -27,7 +27,7 @@ const getMessage= async(req,res)=>{
     const message= await Message.find({
         conversationId: conversationId
     }).populate("senderId", "name photoURL").sort({createdAt: 1})
-    return res.status(200).json(messages);
+    return res.status(200).json(message);
 }catch (error) {
     return res.status(500).json({
       message: error.message,

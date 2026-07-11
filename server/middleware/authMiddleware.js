@@ -8,6 +8,9 @@ const verifyToken = async (req, res, next) => {
       req.cookies?.accessToken ||
       req.header("Authorization")?.replace("Bearer ", "");
 
+      console.log(req.cookies+"1");
+      console.log(req.headers.authorization+"2");
+
    
     if (!token) {
       return res.status(401).json({
@@ -17,7 +20,7 @@ const verifyToken = async (req, res, next) => {
     }
 
   
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token,  process.env.ACCESS_TOKEN_SECRET);
 
     const user = await User.findById(decoded.id).select(
       "-password -refreshToken"
