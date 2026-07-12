@@ -100,7 +100,7 @@ const loginUser = async (req, res) => {
     success: true,
     message: "Login Successful",
     user: {
-      id: user._id,
+      _id: user._id,
       name: user.name,
       email: user.email,
     },
@@ -114,4 +114,20 @@ const loginUser = async (req, res) => {
   }
 };
 
-export { registerUser, loginUser };
+const getAllUsers = async (req, res) => {
+  try {
+    const currentUserId = req.user._id;
+
+    const users = await User.find({
+      _id: { $ne: currentUserId }, // Exclude logged-in user
+    }).select("-password");
+
+    return res.status(200).json(users);
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+export { registerUser, loginUser ,getAllUsers};

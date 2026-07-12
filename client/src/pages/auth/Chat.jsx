@@ -1,13 +1,27 @@
-import React from 'react'
 
 
-const Chat = () => {
+import { useState } from "react";
+import Sidebar from "../../components/Sidebar";
+import MessageContainer from "../../components/MessageContainer";
+
+function Chat() {
+
+  const [selectedConversation, setSelectedConversation] = useState(null);
+
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <h1 className="text-4xl font-bold">
-        Welcome to Baatchit 💬
-      </h1>
+    <div className="flex h-screen">
+
+      <Sidebar
+        selectedConversation={selectedConversation}
+        setSelectedConversation={setSelectedConversation}
+      />
+
+      <MessageContainer
+        selectedConversation={selectedConversation}
+      />
+
     </div>
-  )
+  );
 }
+
 export default Chat;
