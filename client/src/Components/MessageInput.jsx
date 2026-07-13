@@ -27,10 +27,10 @@ function MessageInput({
 
       console.log(response.data);
 
-      // Add new message instantly
+      
       setMessages((prev) => [...prev, response.data]);
 
-      // Clear input
+      
       setMessage("");
 
     } catch (error) {

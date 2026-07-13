@@ -62,12 +62,12 @@ function Login() {
         password: formData.password,
       });
 
-      // Store logged in user in Context
+      
       setUser(response.data.user);
 
       alert(response.data.message);
 
-      // Redirect to chat page
+     
       navigate("/chat");
     } catch (error) {
       alert(error.response?.data?.message || "Invalid credentials");

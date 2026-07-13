@@ -130,4 +130,32 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-export { registerUser, loginUser ,getAllUsers};
+const logoutUser = async (req, res) => {
+  try {
+    await User.findByIdAndUpdate(req.user._id, {
+      refreshToken: "",
+    });
+
+    const options = {
+      httpOnly: true,
+      secure: false,
+    };
+
+    return res
+      .status(200)
+      .clearCookie("accessToken", options)
+      .clearCookie("refreshToken", options)
+      .json({
+        success: true,
+        message: "Logout Successful",
+      });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+export { registerUser, loginUser ,getAllUsers,logoutUser};
