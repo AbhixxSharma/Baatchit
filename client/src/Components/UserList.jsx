@@ -18,20 +18,20 @@ function UserList({
     }
   };
 
-  // Create Conversation
+ 
   const createConversation = async (receiverId) => {
     try {
       const response = await API.post("/conversations", {
         receiverId,
       });
 
-      // Select the newly created conversation
+      
       setSelectedConversation(response.data);
 
-      // Refresh Sidebar
+      
       await getConversations();
 
-      // Close Popup
+      
       onClose();
     } catch (error) {
       console.log(error);
@@ -46,7 +46,7 @@ function UserList({
     <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
       <div className="bg-white w-96 rounded-xl shadow-xl p-5">
 
-        {/* Header */}
+    
         <div className="flex justify-between items-center mb-5">
           <h2 className="text-2xl font-bold">
             New Chat
@@ -60,7 +60,7 @@ function UserList({
           </button>
         </div>
 
-        {/* User List */}
+     
         <div className="space-y-2 max-h-96 overflow-y-auto">
 
           {users.length === 0 ? (

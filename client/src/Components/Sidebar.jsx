@@ -51,13 +51,13 @@ function Sidebar({
   return (
     <div className="w-80 h-screen border-r bg-white flex flex-col">
 
-      {/* Current User */}
+     
       <div className="p-4 border-b">
         <h2 className="text-xl font-bold">{user?.name}</h2>
         <p className="text-sm text-gray-500">{user?.email}</p>
       </div>
 
-      {/* New Chat */}
+    
       <div className="p-4 border-b">
         <button
           onClick={() => setShowUserList(true)}
@@ -67,7 +67,7 @@ function Sidebar({
         </button>
       </div>
 
-      {/* Search */}
+      
       <div className="p-4 border-b">
         <input
           type="text"
@@ -76,7 +76,7 @@ function Sidebar({
         />
       </div>
 
-      {/* Conversations */}
+      
       <div className="flex-1 overflow-y-auto">
         {conversations.length === 0 ? (
           <p className="text-center text-gray-500 mt-5">
@@ -112,7 +112,7 @@ function Sidebar({
                     : ""
                 }`}
               >
-                {/* Avatar */}
+              
                 <div className="relative">
                   <img
                     src={
@@ -128,7 +128,7 @@ function Sidebar({
                   )}
                 </div>
 
-                {/* User Info */}
+             
                 <div className="flex-1">
                   <h3 className="font-semibold">
                     {otherUser.name}
@@ -155,7 +155,7 @@ function Sidebar({
         )}
       </div>
 
-      {/* Logout */}
+   
       <div className="p-4 border-t">
         <button
           onClick={handleLogout}
@@ -165,7 +165,7 @@ function Sidebar({
         </button>
       </div>
 
-      {/* User List */}
+     
       {showUserList && (
         <UserList
           onClose={() => setShowUserList(false)}

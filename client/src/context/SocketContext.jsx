@@ -11,7 +11,7 @@ export const SocketProvider = ({ children }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
 
   useEffect(() => {
-    // If user is not logged in
+
     if (!user) {
       if (socket) {
         socket.disconnect();
@@ -22,7 +22,7 @@ export const SocketProvider = ({ children }) => {
       return;
     }
 
-    // Connect Socket
+    
     const socketInstance = io("http://localhost:5000", {
       query: {
         userId: user._id,
@@ -32,13 +32,13 @@ export const SocketProvider = ({ children }) => {
 
     setSocket(socketInstance);
 
-    // Listen for online users
+
     socketInstance.on("getOnlineUsers", (users) => {
       console.log("🟢 Online Users:", users);
       setOnlineUsers(users);
     });
 
-    // Cleanup
+   
     return () => {
       socketInstance.disconnect();
     };

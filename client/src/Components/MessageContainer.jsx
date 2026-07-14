@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import API from "../api/axios";
 import { AuthContext } from "../context/AuthContext";
 import { useSocket } from "../context/SocketContext";
@@ -9,6 +9,9 @@ function MessageContainer({ selectedConversation }) {
   const { socket } = useSocket();
 
   const [messages, setMessages] = useState([]);
+  const [typing, setTyping] = useState("");
+
+  const typingTimeout = useRef(null);
 
   // Fetch Messages
   const getMessages = async () => {
@@ -19,37 +22,70 @@ function MessageContainer({ selectedConversation }) {
         `/messages/${selectedConversation._id}`
       );
 
-      console.log(response.data);
-
       setMessages(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  // Load messages when conversation changes
+  // Load messages whenever conversation changes
   useEffect(() => {
     getMessages();
   }, [selectedConversation]);
 
-  // ⭐ Listen for realtime messages
+  // Listen for realtime messages
   useEffect(() => {
     if (!socket) return;
 
-    socket.on("newMessage", (newMessage) => {
+    const handleNewMessage = (newMessage) => {
       console.log("Realtime Message:", newMessage);
 
-      // Only show if current conversation is open
-      if (newMessage.conversationId === selectedConversation?._id) {
-        setMessages((prev) => [...prev, newMessage]);
+      if (
+        String(newMessage.conversationId) !==
+        String(selectedConversation?._id)
+      ) {
+        return;
       }
-    });
 
-    // Cleanup
+      setMessages((prev) => {
+        const exists = prev.some(
+          (msg) => String(msg._id) === String(newMessage._id)
+        );
+
+        if (exists) return prev;
+
+        return [...prev, newMessage];
+      });
+    };
+
+    socket.on("newMessage", handleNewMessage);
+
     return () => {
-      socket.off("newMessage");
+      socket.off("newMessage", handleNewMessage);
     };
   }, [socket, selectedConversation]);
+
+  // Typing Indicator
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleTyping = ({ senderName }) => {
+      setTyping(`${senderName} is typing...`);
+
+      clearTimeout(typingTimeout.current);
+
+      typingTimeout.current = setTimeout(() => {
+        setTyping("");
+      }, 1500);
+    };
+
+    socket.on("typing", handleTyping);
+
+    return () => {
+      socket.off("typing", handleTyping);
+      clearTimeout(typingTimeout.current);
+    };
+  }, [socket]);
 
   if (!selectedConversation) {
     return (
@@ -62,7 +98,8 @@ function MessageContainer({ selectedConversation }) {
   }
 
   const otherUser = selectedConversation.participants.find(
-    (participant) => participant._id !== user?._id
+    (participant) =>
+      String(participant._id) !== String(user?._id)
   );
 
   return (
@@ -73,47 +110,56 @@ function MessageContainer({ selectedConversation }) {
         <h2 className="text-xl font-semibold">
           {otherUser?.name}
         </h2>
+
+        {typing && (
+          <p className="text-sm text-green-600 mt-1 animate-pulse">
+            {typing}
+          </p>
+        )}
       </div>
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 bg-gray-100">
-
         {messages.length === 0 ? (
           <p className="text-center text-gray-500">
             No messages yet.
           </p>
         ) : (
-          messages.map((message) => (
-            <div
-              key={message._id}
-              className={`mb-3 flex ${
-                message.senderId._id === user?._id
-                  ? "justify-end"
-                  : "justify-start"
-              }`}
-            >
+          messages.map((message) => {
+            const isMe =
+              String(message.senderId._id) ===
+              String(user?._id);
+
+            return (
               <div
-                className={`px-4 py-2 rounded-lg max-w-xs ${
-                  message.senderId._id === user?._id
-                    ? "bg-blue-500 text-white"
-                    : "bg-white"
+                key={message._id}
+                className={`mb-3 flex ${
+                  isMe
+                    ? "justify-end"
+                    : "justify-start"
                 }`}
               >
-                {message.message}
+                <div
+                  className={`px-4 py-2 rounded-lg max-w-xs ${
+                    isMe
+                      ? "bg-blue-500 text-white"
+                      : "bg-white"
+                  }`}
+                >
+                  {message.message}
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
-
       </div>
 
-      {/* Message Input */}
+      {/* Input */}
       <MessageInput
         selectedConversation={selectedConversation}
         messages={messages}
         setMessages={setMessages}
       />
-
     </div>
   );
 }

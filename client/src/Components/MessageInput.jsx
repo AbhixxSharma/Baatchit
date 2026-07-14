@@ -1,15 +1,16 @@
 import { useState, useContext } from "react";
 import API from "../api/axios";
 import { AuthContext } from "../context/AuthContext";
+import { useSocket } from "../context/SocketContext";
 
 function MessageInput({
   selectedConversation,
-  messages,
   setMessages,
 }) {
   const [message, setMessage] = useState("");
 
   const { user } = useContext(AuthContext);
+  const { socket } = useSocket();
 
   const receiver = selectedConversation?.participants.find(
     (participant) => participant._id !== user?._id
@@ -25,12 +26,17 @@ function MessageInput({
         message,
       });
 
-      console.log(response.data);
+      // ✅ Add message immediately for sender
+      setMessages((prev) => {
+        const exists = prev.some(
+          (msg) => String(msg._id) === String(response.data._id)
+        );
 
-      
-      setMessages((prev) => [...prev, response.data]);
+        if (exists) return prev;
 
-      
+        return [...prev, response.data];
+      });
+
       setMessage("");
 
     } catch (error) {
@@ -39,13 +45,24 @@ function MessageInput({
     }
   };
 
+  const handleTyping = (e) => {
+    setMessage(e.target.value);
+
+    if (!receiver) return;
+
+    socket?.emit("typing", {
+      receiverId: receiver._id,
+      senderName: user.name,
+    });
+  };
+
   return (
     <div className="p-4 border-t flex gap-2 bg-white">
 
       <input
         type="text"
         value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        onChange={handleTyping}
         placeholder="Type a message..."
         className="flex-1 border rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
         onKeyDown={(e) => {
