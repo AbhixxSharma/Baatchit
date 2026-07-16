@@ -6,7 +6,7 @@ const createConversation = async (req, res) => {
     const { receiverId } = req.body;
     const senderId = req.user._id;
 
-    // Check if conversation already exists
+   
     let conversation = await Conversation.findOne({
       participants: {
         $all: [senderId, receiverId],
@@ -17,12 +17,12 @@ const createConversation = async (req, res) => {
       return res.status(200).json(conversation);
     }
 
-    // Create new conversation
+   
     const newConversation = await Conversation.create({
       participants: [senderId, receiverId],
     });
 
-    // Populate participants before sending
+    
     conversation = await Conversation.findById(newConversation._id)
       .populate("participants", "name email profile_picture");
 
@@ -35,7 +35,7 @@ const createConversation = async (req, res) => {
   }
 };
 
-// Get User Conversations
+
 const getUserConversations = async (req, res) => {
   try {
     const userId = req.user._id;

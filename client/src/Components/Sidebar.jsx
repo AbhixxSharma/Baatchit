@@ -49,40 +49,100 @@ function Sidebar({
   }, []);
 
   return (
-    <div className="w-80 h-screen border-r bg-white flex flex-col">
+    <div className="w-80 h-screen bg-slate-50 border-r border-slate-200 flex flex-col shadow-xl">
 
-     
-      <div className="p-4 border-b">
-        <h2 className="text-xl font-bold">{user?.name}</h2>
-        <p className="text-sm text-gray-500">{user?.email}</p>
+      {/* Profile */}
+
+      <div className="p-5 border-b bg-white">
+
+        <div className="flex items-center gap-3">
+
+          <img
+            src={`https://ui-avatars.com/api/?background=10b981&color=fff&name=${user?.name}`}
+            alt={user?.name}
+            className="w-14 h-14 rounded-full shadow-md"
+          />
+
+          <div>
+
+            <h2 className="font-bold text-lg text-slate-800">
+              {user?.name}
+            </h2>
+
+            <p className="text-sm text-slate-500">
+              {user?.email}
+            </p>
+
+          </div>
+
+        </div>
+
       </div>
 
-    
-      <div className="p-4 border-b">
+      {/* New Chat */}
+
+      <div className="p-4 bg-white border-b">
+
         <button
           onClick={() => setShowUserList(true)}
-          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
+          className="
+          w-full
+          py-3
+          rounded-xl
+          bg-gradient-to-r
+          from-emerald-500
+          to-green-600
+          text-white
+          font-semibold
+          transition-all
+          duration-300
+          hover:scale-[1.03]
+          hover:shadow-xl
+          hover:shadow-emerald-300
+          active:scale-95
+          "
         >
           + New Chat
         </button>
+
       </div>
 
-      
-      <div className="p-4 border-b">
+      {/* Search */}
+
+      <div className="p-4 bg-white border-b">
+
         <input
           type="text"
-          placeholder="Search..."
-          className="w-full border rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Search conversations..."
+          className="
+          w-full
+          rounded-xl
+          border
+          border-slate-300
+          px-4
+          py-3
+          outline-none
+          bg-slate-50
+          focus:ring-2
+          focus:ring-emerald-400
+          transition-all
+          "
         />
+
       </div>
 
-      
-      <div className="flex-1 overflow-y-auto">
+      {/* Conversations */}
+
+      <div className="flex-1 overflow-y-auto py-2">
+
         {conversations.length === 0 ? (
-          <p className="text-center text-gray-500 mt-5">
+
+          <p className="text-center text-slate-500 mt-6">
             No Conversations Found
           </p>
+
         ) : (
+
           conversations.map((conversation) => {
 
             const otherUser = conversation.participants.find(
@@ -96,76 +156,144 @@ function Sidebar({
               (id) => String(id) === String(otherUser._id)
             );
 
-            console.log({
-              otherUserId: otherUser._id,
-              onlineUsers,
-              isOnline,
-            });
-
             return (
+
               <div
                 key={conversation._id}
-                onClick={() => setSelectedConversation(conversation)}
-                className={`flex items-center gap-3 p-4 border-b cursor-pointer hover:bg-gray-100 transition ${
-                  selectedConversation?._id === conversation._id
-                    ? "bg-blue-100"
+                onClick={() =>
+                  setSelectedConversation(conversation)
+                }
+                className={`
+                mx-3
+                my-2
+                rounded-2xl
+                cursor-pointer
+                transition-all
+                duration-300
+                hover:bg-white
+                hover:shadow-lg
+                hover:scale-[1.02]
+                hover:-translate-y-1
+
+                ${
+                  selectedConversation?._id ===
+                  conversation._id
+                    ? "bg-emerald-100 border-l-4 border-emerald-500 shadow-md"
                     : ""
-                }`}
+                }
+                `}
               >
-              
-                <div className="relative">
-                  <img
-                    src={
-                      otherUser.profile_picture ||
-                      `https://ui-avatars.com/api/?name=${otherUser.name}`
-                    }
-                    alt={otherUser.name}
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
 
-                  {isOnline && (
-                    <span className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></span>
-                  )}
+                <div className="flex items-center gap-3 p-3">
+
+                  {/* Avatar */}
+
+                  <div className="relative">
+
+                    <img
+                      src={
+                        otherUser.profile_picture ||
+                        `https://ui-avatars.com/api/?background=10b981&color=fff&name=${otherUser.name}`
+                      }
+                      alt={otherUser.name}
+                      className="
+                      w-14
+                      h-14
+                      rounded-full
+                      object-cover
+                      shadow-md
+                      transition-transform
+                      duration-300
+                      hover:scale-110
+                      "
+                    />
+
+                    {isOnline && (
+
+                      <span
+                        className="
+                        absolute
+                        bottom-1
+                        right-1
+                        w-3.5
+                        h-3.5
+                        rounded-full
+                        bg-emerald-500
+                        ring-2
+                        ring-white
+                        animate-pulse
+                        "
+                      />
+
+                    )}
+
+                  </div>
+
+                  {/* Info */}
+
+                  <div className="flex-1">
+
+                    <h3 className="font-semibold text-slate-800">
+                      {otherUser.name}
+                    </h3>
+
+                    <p
+                      className={`text-xs font-medium ${
+                        isOnline
+                          ? "text-emerald-600"
+                          : "text-slate-400"
+                      }`}
+                    >
+                      {isOnline ? "Online" : "Offline"}
+                    </p>
+
+                    <p className="text-sm text-slate-500 truncate mt-1">
+                      {conversation.lastMessage ||
+                        "Start chatting..."}
+                    </p>
+
+                  </div>
+
                 </div>
 
-             
-                <div className="flex-1">
-                  <h3 className="font-semibold">
-                    {otherUser.name}
-                  </h3>
-
-                  <p
-                    className={`text-xs font-medium ${
-                      isOnline
-                        ? "text-green-600"
-                        : "text-gray-400"
-                    }`}
-                  >
-                    {isOnline ? "🟢 Online" : "⚪ Offline"}
-                  </p>
-
-                  <p className="text-sm text-gray-500 truncate">
-                    {conversation.lastMessage ||
-                      "Start a conversation"}
-                  </p>
-                </div>
               </div>
+
             );
+
           })
+
         )}
+
       </div>
 
-   
-      <div className="p-4 border-t">
+      {/* Logout */}
+
+      <div className="p-4 border-t bg-white">
+
         <button
           onClick={handleLogout}
-          className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition font-semibold"
+          className="
+          w-full
+          py-3
+          rounded-xl
+          font-semibold
+          text-white
+          bg-gradient-to-r
+          from-red-500
+          to-rose-600
+          transition-all
+          duration-300
+          hover:scale-[1.03]
+          hover:shadow-xl
+          hover:shadow-red-300
+          active:scale-95
+          "
         >
-          🚪 Logout
+          Logout
         </button>
+
       </div>
 
-     
       {showUserList && (
         <UserList
           onClose={() => setShowUserList(false)}
@@ -173,6 +301,7 @@ function Sidebar({
           setSelectedConversation={setSelectedConversation}
         />
       )}
+
     </div>
   );
 }

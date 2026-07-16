@@ -74,78 +74,101 @@ function Login() {
     }
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
-        <h1 className="text-3xl font-bold text-center mb-6">
+ return (
+  <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50 flex items-center justify-center px-6">
+
+    <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-200 p-8">
+
+      <div className="flex flex-col items-center mb-8">
+
+        <div className="w-20 h-20 rounded-full bg-emerald-500 flex items-center justify-center text-4xl text-white shadow-lg">
+          💬
+        </div>
+
+        <h1 className="text-4xl font-bold text-slate-800 mt-4">
           Welcome Back
         </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <p className="text-slate-500 mt-2">
+          Login to continue chatting
+        </p>
 
-          <div>
-            <label className="block mb-2 font-medium">
-              Email
-            </label>
-
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
-            />
-
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.email}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label className="block mb-2 font-medium">
-              Password
-            </label>
-
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
-            />
-
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.password}
-              </p>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
-          >
-            Login
-          </button>
-
-          <p className="text-center mt-4">
-            Don't have an account?{" "}
-            <Link
-              to="/register"
-              className="text-blue-600 font-semibold hover:underline"
-            >
-              Register
-            </Link>
-          </p>
-
-        </form>
       </div>
+
+      <form onSubmit={handleSubmit} className="space-y-5">
+
+        <div>
+
+          <label className="block text-slate-700 font-medium mb-2">
+            Email
+          </label>
+
+          <input
+            type="email"
+            name="email"
+            placeholder="john@gmail.com"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full rounded-xl border border-slate-300 px-4 py-3 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
+          />
+
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-2">
+              {errors.email}
+            </p>
+          )}
+
+        </div>
+
+        <div>
+
+          <label className="block text-slate-700 font-medium mb-2">
+            Password
+          </label>
+
+          <input
+            type="password"
+            name="password"
+            placeholder="********"
+            value={formData.password}
+            onChange={handleChange}
+            className="w-full rounded-xl border border-slate-300 px-4 py-3 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
+          />
+
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-2">
+              {errors.password}
+            </p>
+          )}
+
+        </div>
+
+        <button
+          type="submit"
+          className="w-full py-3 rounded-xl bg-emerald-500 text-white font-semibold text-lg hover:bg-emerald-600 transition-all duration-300 shadow-lg hover:shadow-emerald-300"
+        >
+          Login
+        </button>
+
+      </form>
+
+      <p className="text-center text-slate-500 mt-8">
+
+        Don't have an account?
+
+        <Link
+          to="/register"
+          className="ml-2 text-emerald-600 font-semibold hover:underline"
+        >
+          Register
+        </Link>
+
+      </p>
+
     </div>
-  );
+
+  </div>
+);
 }
 
 export default Login;

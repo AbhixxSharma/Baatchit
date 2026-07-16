@@ -91,7 +91,6 @@ const loginUser = async (req, res) => {
       secure:false,
     }
 
-    // 7. Send response
    return res
   .status(200)
   .cookie("accessToken", accessToken, options)
@@ -119,7 +118,7 @@ const getAllUsers = async (req, res) => {
     const currentUserId = req.user._id;
 
     const users = await User.find({
-      _id: { $ne: currentUserId }, // Exclude logged-in user
+      _id: { $ne: currentUserId }, 
     }).select("-password");
 
     return res.status(200).json(users);

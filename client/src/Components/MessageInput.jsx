@@ -8,6 +8,7 @@ function MessageInput({
   setMessages,
 }) {
   const [message, setMessage] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const { user } = useContext(AuthContext);
   const { socket } = useSocket();
@@ -17,16 +18,39 @@ function MessageInput({
   );
 
   const sendMessage = async () => {
-    if (!message.trim()) return;
+    if (!message.trim() && !selectedFile) return;
 
     try {
-      const response = await API.post("/messages", {
-        conversationId: selectedConversation._id,
-        receiverId: receiver._id,
-        message,
-      });
+      const formData = new FormData();
 
-      // ✅ Add message immediately for sender
+      formData.append(
+        "conversationId",
+        selectedConversation._id
+      );
+
+      formData.append(
+        "receiverId",
+        receiver._id
+      );
+
+      if (message.trim()) {
+        formData.append("message", message);
+      }
+
+      if (selectedFile) {
+        formData.append("media", selectedFile);
+      }
+
+      const response = await API.post(
+        "/messages",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
       setMessages((prev) => {
         const exists = prev.some(
           (msg) => String(msg._id) === String(response.data._id)
@@ -38,10 +62,14 @@ function MessageInput({
       });
 
       setMessage("");
+      setSelectedFile(null);
 
     } catch (error) {
       console.log(error);
-      alert(error.response?.data?.message || "Failed to send message");
+      alert(
+        error.response?.data?.message ||
+          "Failed to send message"
+      );
     }
   };
 
@@ -57,27 +85,149 @@ function MessageInput({
   };
 
   return (
-    <div className="p-4 border-t flex gap-2 bg-white">
+    <div className="border-t bg-white p-4">
 
-      <input
-        type="text"
-        value={message}
-        onChange={handleTyping}
-        placeholder="Type a message..."
-        className="flex-1 border rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            sendMessage();
+      {/* Selected File */}
+
+      {selectedFile && (
+
+        <div className="mb-3 flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3">
+
+          <div className="flex items-center gap-3">
+
+            <span className="text-2xl">📎</span>
+
+            <div>
+
+              <p className="font-medium text-slate-700">
+                {selectedFile.name}
+              </p>
+
+              <p className="text-xs text-slate-500">
+                {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+              </p>
+
+            </div>
+
+          </div>
+
+          <button
+            onClick={() => setSelectedFile(null)}
+            className="
+            w-8
+            h-8
+            rounded-full
+            bg-red-100
+            text-red-600
+            hover:bg-red-500
+            hover:text-white
+            transition-all
+            duration-300
+            "
+          >
+            ✕
+          </button>
+
+        </div>
+
+      )}
+
+      <div className="flex items-center gap-3">
+
+        {/* Upload */}
+
+        <input
+          id="media"
+          type="file"
+          hidden
+          accept="image/*,video/*"
+          onChange={(e) =>
+            setSelectedFile(e.target.files[0])
           }
-        }}
-      />
+        />
 
-      <button
-        onClick={sendMessage}
-        className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition"
-      >
-        Send
-      </button>
+        <label
+          htmlFor="media"
+          className="
+          w-12
+          h-12
+          rounded-full
+          bg-slate-100
+          flex
+          items-center
+          justify-center
+          cursor-pointer
+          text-2xl
+          transition-all
+          duration-300
+          hover:bg-emerald-500
+          hover:text-white
+          hover:scale-110
+          shadow-sm
+          "
+        >
+          📎
+        </label>
+
+        {/* Input */}
+
+        <input
+          type="text"
+          value={message}
+          onChange={handleTyping}
+          placeholder="Type your message..."
+          className="
+          flex-1
+          h-12
+          rounded-full
+          bg-slate-100
+          px-6
+          outline-none
+          transition-all
+          duration-300
+          border
+          border-transparent
+          focus:bg-white
+          focus:border-emerald-400
+          focus:ring-4
+          focus:ring-emerald-100
+          "
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              sendMessage();
+            }
+          }}
+        />
+
+        {/* Send */}
+
+        <button
+          onClick={sendMessage}
+          className="
+          w-12
+          h-12
+          rounded-full
+          bg-gradient-to-r
+          from-emerald-500
+          to-green-600
+          text-white
+          text-xl
+          flex
+          items-center
+          justify-center
+          shadow-lg
+          transition-all
+          duration-300
+          hover:scale-110
+          hover:rotate-12
+          hover:shadow-emerald-300
+          active:scale-95
+          "
+        >
+          ➤
+        </button>
+
+      </div>
 
     </div>
   );

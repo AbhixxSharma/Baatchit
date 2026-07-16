@@ -34,7 +34,7 @@ export const SocketProvider = ({ children }) => {
 
 
     socketInstance.on("getOnlineUsers", (users) => {
-      console.log("🟢 Online Users:", users);
+      // console.log("🟢 Online Users:", users);
       setOnlineUsers(users);
     });
 
