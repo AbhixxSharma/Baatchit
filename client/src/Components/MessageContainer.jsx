@@ -13,7 +13,7 @@ function MessageContainer({ selectedConversation }) {
 
   const typingTimeout = useRef(null);
 
-  // Fetch Messages
+  
   const getMessages = async () => {
     if (!selectedConversation) return;
 
@@ -28,12 +28,12 @@ function MessageContainer({ selectedConversation }) {
     }
   };
 
-  // Load messages whenever conversation changes
+  
   useEffect(() => {
     getMessages();
   }, [selectedConversation]);
 
-  // Listen for realtime messages
+
   useEffect(() => {
     if (!socket) return;
 
@@ -65,7 +65,6 @@ function MessageContainer({ selectedConversation }) {
     };
   }, [socket, selectedConversation]);
 
-  // Typing Indicator
   useEffect(() => {
     if (!socket) return;
 
@@ -105,7 +104,7 @@ function MessageContainer({ selectedConversation }) {
  return (
   <div className="flex-1 flex flex-col bg-gradient-to-br from-slate-100 via-blue-50 to-cyan-50">
 
-    {/* ================= HEADER ================= */}
+   
 
     <div className="h-20 px-6 flex items-center justify-between backdrop-blur-xl bg-white/70 border-b border-white/40 shadow-md">
 
@@ -138,7 +137,7 @@ function MessageContainer({ selectedConversation }) {
             </p>
           ) : (
             <p className="text-slate-500 text-sm">
-              {/* 🟢 Active Now */}
+             
             </p>
           )}
 
@@ -148,7 +147,7 @@ function MessageContainer({ selectedConversation }) {
 
     </div>
 
-    {/* ================= CHAT ================= */}
+  
 
     <div
       className="
@@ -222,7 +221,7 @@ function MessageContainer({ selectedConversation }) {
                 py-3`}
               >
 
-                {/* TEXT */}
+               
 
                 {message.message && (
 
@@ -232,7 +231,7 @@ function MessageContainer({ selectedConversation }) {
 
                 )}
 
-                {/* IMAGE */}
+               
 
                 {message.mediaType === "image" && (
 
@@ -254,7 +253,7 @@ function MessageContainer({ selectedConversation }) {
 
                 )}
 
-                {/* VIDEO */}
+               
 
                 {message.mediaType === "video" && (
 
@@ -275,7 +274,7 @@ function MessageContainer({ selectedConversation }) {
 
                 )}
 
-                {/* TIME */}
+                
 
                 <div
                   className={`mt-2 text-[11px] ${
@@ -301,7 +300,7 @@ function MessageContainer({ selectedConversation }) {
 
     </div>
 
-    {/* ================= INPUT ================= */}
+   
 
     <MessageInput
       selectedConversation={selectedConversation}

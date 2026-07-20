@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 import API from "../api/axios";
 
 function Register() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -71,29 +74,35 @@ function Register() {
         confirmPassword: formData.confirmPassword,
       });
 
-      alert(response.data.message);
+      toast.success(response.data.message);
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
     } catch (error) {
-      alert(error.response?.data?.message || "Something went wrong");
+      toast.error(
+        error.response?.data?.message || "Registration Failed"
+      );
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-gray-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50 flex items-center justify-center px-6">
 
-      <div className="w-full max-w-md rounded-3xl border border-slate-700 bg-slate-900/70 backdrop-blur-xl shadow-2xl shadow-black/40 p-8">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-200 p-8">
 
         <div className="flex flex-col items-center mb-8">
 
-          <div className="w-20 h-20 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 flex items-center justify-center text-4xl shadow-lg mb-4">
+          <div className="w-20 h-20 rounded-full bg-emerald-500 flex items-center justify-center text-4xl text-white shadow-lg">
             💬
           </div>
 
-          <h1 className="text-4xl font-bold text-white">
+          <h1 className="text-4xl font-bold text-slate-800 mt-4">
             Create Account
           </h1>
 
-          <p className="text-slate-400 mt-2">
-            Welcome to <span className="text-cyan-400 font-semibold">BaatChit</span>
+          <p className="text-slate-500 mt-2">
+            Join BaatChit today
           </p>
 
         </div>
@@ -101,7 +110,7 @@ function Register() {
         <form onSubmit={handleSubmit} className="space-y-5">
 
           <div>
-            <label className="text-slate-300 text-sm font-medium">
+            <label className="block text-slate-700 font-medium mb-2">
               Full Name
             </label>
 
@@ -111,18 +120,18 @@ function Register() {
               placeholder="John Doe"
               value={formData.name}
               onChange={handleChange}
-              className="mt-2 w-full bg-slate-800 text-white border border-slate-700 rounded-xl px-4 py-3 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition"
+              className="w-full rounded-xl border border-slate-300 px-4 py-3 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
             />
 
             {errors.name && (
-              <p className="text-red-400 text-sm mt-1">
+              <p className="text-red-500 text-sm mt-2">
                 {errors.name}
               </p>
             )}
           </div>
 
           <div>
-            <label className="text-slate-300 text-sm font-medium">
+            <label className="block text-slate-700 font-medium mb-2">
               Email
             </label>
 
@@ -132,18 +141,18 @@ function Register() {
               placeholder="john@gmail.com"
               value={formData.email}
               onChange={handleChange}
-              className="mt-2 w-full bg-slate-800 text-white border border-slate-700 rounded-xl px-4 py-3 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition"
+              className="w-full rounded-xl border border-slate-300 px-4 py-3 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
             />
 
             {errors.email && (
-              <p className="text-red-400 text-sm mt-1">
+              <p className="text-red-500 text-sm mt-2">
                 {errors.email}
               </p>
             )}
           </div>
 
           <div>
-            <label className="text-slate-300 text-sm font-medium">
+            <label className="block text-slate-700 font-medium mb-2">
               Password
             </label>
 
@@ -153,18 +162,18 @@ function Register() {
               placeholder="********"
               value={formData.password}
               onChange={handleChange}
-              className="mt-2 w-full bg-slate-800 text-white border border-slate-700 rounded-xl px-4 py-3 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition"
+              className="w-full rounded-xl border border-slate-300 px-4 py-3 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
             />
 
             {errors.password && (
-              <p className="text-red-400 text-sm mt-1">
+              <p className="text-red-500 text-sm mt-2">
                 {errors.password}
               </p>
             )}
           </div>
 
           <div>
-            <label className="text-slate-300 text-sm font-medium">
+            <label className="block text-slate-700 font-medium mb-2">
               Confirm Password
             </label>
 
@@ -174,11 +183,11 @@ function Register() {
               placeholder="********"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="mt-2 w-full bg-slate-800 text-white border border-slate-700 rounded-xl px-4 py-3 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition"
+              className="w-full rounded-xl border border-slate-300 px-4 py-3 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
             />
 
             {errors.confirmPassword && (
-              <p className="text-red-400 text-sm mt-1">
+              <p className="text-red-500 text-sm mt-2">
                 {errors.confirmPassword}
               </p>
             )}
@@ -186,25 +195,24 @@ function Register() {
 
           <button
             type="submit"
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-lg hover:scale-[1.02] hover:shadow-lg hover:shadow-cyan-500/30 transition-all duration-300"
+            className="w-full py-3 rounded-xl bg-emerald-500 text-white font-semibold text-lg hover:bg-emerald-600 hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-emerald-300"
           >
             Create Account
           </button>
 
         </form>
 
-        <div className="mt-8 text-center text-slate-400">
-
+        <p className="text-center text-slate-500 mt-8">
           Already have an account?
 
           <Link
             to="/login"
-            className="ml-2 text-cyan-400 hover:text-cyan-300 font-semibold"
+            className="ml-2 text-emerald-600 font-semibold hover:underline"
           >
             Login
           </Link>
 
-        </div>
+        </p>
 
       </div>
 

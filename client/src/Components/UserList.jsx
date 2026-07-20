@@ -8,7 +8,7 @@ function UserList({
 }) {
   const [users, setUsers] = useState([]);
 
-  // Fetch all users
+  
   const getUsers = async () => {
     try {
       const response = await API.get("/auth/users");

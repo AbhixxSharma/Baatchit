@@ -87,7 +87,7 @@ function MessageInput({
   return (
     <div className="border-t bg-white p-4">
 
-      {/* Selected File */}
+      
 
       {selectedFile && (
 
@@ -134,7 +134,7 @@ function MessageInput({
 
       <div className="flex items-center gap-3">
 
-        {/* Upload */}
+      
 
         <input
           id="media"
@@ -169,7 +169,7 @@ function MessageInput({
           📎
         </label>
 
-        {/* Input */}
+        
 
         <input
           type="text"
@@ -199,7 +199,7 @@ function MessageInput({
           }}
         />
 
-        {/* Send */}
+        
 
         <button
           onClick={sendMessage}

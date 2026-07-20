@@ -51,7 +51,7 @@ function Sidebar({
   return (
     <div className="w-80 h-screen bg-slate-50 border-r border-slate-200 flex flex-col shadow-xl">
 
-      {/* Profile */}
+     
 
       <div className="p-5 border-b bg-white">
 
@@ -79,8 +79,7 @@ function Sidebar({
 
       </div>
 
-      {/* New Chat */}
-
+     
       <div className="p-4 bg-white border-b">
 
         <button
@@ -107,7 +106,7 @@ function Sidebar({
 
       </div>
 
-      {/* Search */}
+   
 
       <div className="p-4 bg-white border-b">
 
@@ -131,8 +130,7 @@ function Sidebar({
 
       </div>
 
-      {/* Conversations */}
-
+    
       <div className="flex-1 overflow-y-auto py-2">
 
         {conversations.length === 0 ? (
@@ -186,7 +184,7 @@ function Sidebar({
 
                 <div className="flex items-center gap-3 p-3">
 
-                  {/* Avatar */}
+                  
 
                   <div className="relative">
 
@@ -229,7 +227,7 @@ function Sidebar({
 
                   </div>
 
-                  {/* Info */}
+                  
 
                   <div className="flex-1">
 
@@ -266,7 +264,7 @@ function Sidebar({
 
       </div>
 
-      {/* Logout */}
+    
 
       <div className="p-4 border-t bg-white">
 
